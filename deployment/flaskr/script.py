@@ -4,8 +4,6 @@ import pickle
 import numpy as np
 import os
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-
 import string
 import nltk
 from nltk.tokenize import word_tokenize
@@ -25,15 +23,16 @@ def preprocess(text):
 
 # Data transformation
 def data_transformer(corpus):
-    tfidf = TfidfVectorizer()
-    vectors = tfidf.fit_transform(corpus)
+    tfidf = pickle.load(open("D:\IDEs/anaconda\envs\email-ham-spam\data/tfidf.pkl",'rb'))
+    vectors = tfidf.transform(corpus)
     return vectors
 
 # Prediction function
 def ValuePredictor(to_predict_list):
     to_predict = [preprocess(text) for text in to_predict_list]
     x = data_transformer(to_predict)
-    loaded_model = pickle.load(open("model.pkl", "rb"))
+    loaded_model = pickle.load(open("D:\IDEs/anaconda\envs\email-ham-spam\data\model.pkl", "rb"))
+    # loaded_model.fit_transform(x)
     result = loaded_model.predict(x)
     return result[0]
 
